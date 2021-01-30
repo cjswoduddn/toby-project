@@ -2,12 +2,19 @@ package woo.young.tobyproject.dao;
 
 import woo.young.tobyproject.domain.User;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class UserDao {
 
+    private DataSource dataSource;
+
+    public UserDao(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     public void add(User user) throws ClassNotFoundException, SQLException{
-        Connection c = getConnection();
+        Connection c = dataSource.getConnection();
 
         PreparedStatement ps = c.prepareStatement(
                 "insert into users(id, name, password) values(?, ?, ?)");
@@ -22,7 +29,7 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException{
-        Connection c = getConnection();
+        Connection c = dataSource.getConnection();
 
         PreparedStatement ps = c.prepareStatement(
                 "select * from users where id = ?");
@@ -43,27 +50,4 @@ public class UserDao {
         return user;
     }
 
-    protected Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("org.h2.Driver");
-        return DriverManager.getConnection("jdbc:h2:tcp://localhost/~/backapi",
-                "cjswo", "duddn");
-    }
-
-
-
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao dao = new UserDao();
-
-        User user = new User();
-        user.setId("id");
-        user.setName("name");
-        user.setPassword("pw");
-
-        dao.add(user);
-        System.out.println("user = " + user);
-
-        User user1 = dao.get(user.getId());
-        System.out.println(user1.getName());
-
-    }
 }
