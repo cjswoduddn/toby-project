@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import woo.young.tobyproject.dao.JdbcContext;
-import woo.young.tobyproject.dao.UserDao;
+import woo.young.tobyproject.dao.UserDaoJdbc;
 import woo.young.tobyproject.dao.UserMapper;
 import woo.young.tobyproject.domain.User;
 
@@ -16,8 +16,8 @@ import javax.sql.DataSource;
 public class DaoFactory {
 
     @Bean
-    public UserDao userDao(){
-        return new UserDao(userMapper(), jdbcTemplate());
+    public UserDaoJdbc userDao(){
+        return new UserDaoJdbc(userMapper(), jdbcTemplate());
     }
 
     @Bean

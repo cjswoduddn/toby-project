@@ -7,6 +7,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import woo.young.tobyproject.domain.User;
+import woo.young.tobyproject.exception.DuplicateUserIdException;
 import woo.young.tobyproject.factory.DaoFactory;
 
 import java.util.List;
@@ -25,7 +26,7 @@ class UserDaoTest {
     @BeforeEach
     void before() throws Exception{
         ac = new AnnotationConfigApplicationContext(DaoFactory.class);
-        userDao = ac.getBean(UserDao.class);
+        userDao = ac.getBean(UserDaoJdbc.class);
         user1 = new User("id1", "name1", "pw1");
         user2 = new User("id2","name2", "pw2");
         user3 = new User("id3","name3", "pw3");
@@ -55,6 +56,7 @@ class UserDaoTest {
         userDao.add(user1);
         //when
         assertThrows(DuplicateKeyException.class, ()->userDao.add(user1));
+//        assertThrows(DuplicateUserIdException.class, () -> userDao.add(user1));
 
         //then
     }
