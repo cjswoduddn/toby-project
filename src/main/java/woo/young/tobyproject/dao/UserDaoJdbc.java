@@ -20,8 +20,9 @@ public class UserDaoJdbc implements UserDao{
     }
 
     public void add(User user){
-        String query = "insert into users(id, name, password) values(?, ?, ?)";
-        jdbcTemplate.update(query, user.getId(), user.getName(), user.getPassword());
+        String query = "insert into users(id, name, password, level, login, recommend) values(?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(query, user.getId(), user.getName(), user.getPassword(),
+                user.getLevel().toString(), user.getLogin(), user.getRecommend());
     }
 
     public void deleteAll() {
@@ -44,6 +45,16 @@ public class UserDaoJdbc implements UserDao{
 
     public int getCount(){
         return jdbcTemplate.queryForObject("select count(*) from users", Integer.class);
+    }
+
+    @Override
+    public void update(User user) {
+        this.jdbcTemplate.update(
+                "update users set name = ?, password = ?, level = ?, login = ?," +
+                        "recommend = ? where id = ? ", user.getName(),
+                user.getPassword(), user.getLevel().toString(), user.getLogin(), user.getRecommend(),
+                user.getId()
+        );
     }
 
 }

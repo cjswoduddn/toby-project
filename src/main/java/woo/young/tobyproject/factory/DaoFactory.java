@@ -9,6 +9,7 @@ import woo.young.tobyproject.dao.JdbcContext;
 import woo.young.tobyproject.dao.UserDaoJdbc;
 import woo.young.tobyproject.dao.UserMapper;
 import woo.young.tobyproject.domain.User;
+import woo.young.tobyproject.service.UserService;
 
 import javax.sql.DataSource;
 
@@ -32,6 +33,8 @@ public class DaoFactory {
     public JdbcContext jdbcContext(){
         return new JdbcContext(dataSource());
     }
+    @Bean
+    UserService userService(){return new UserService(userDao());}
 
     @Bean
     public DataSource dataSource(){

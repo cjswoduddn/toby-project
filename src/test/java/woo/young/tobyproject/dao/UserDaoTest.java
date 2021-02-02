@@ -6,8 +6,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import woo.young.tobyproject.domain.Level;
 import woo.young.tobyproject.domain.User;
-import woo.young.tobyproject.exception.DuplicateUserIdException;
 import woo.young.tobyproject.factory.DaoFactory;
 
 import java.util.List;
@@ -27,9 +27,9 @@ class UserDaoTest {
     void before() throws Exception{
         ac = new AnnotationConfigApplicationContext(DaoFactory.class);
         userDao = ac.getBean(UserDaoJdbc.class);
-        user1 = new User("id1", "name1", "pw1");
-        user2 = new User("id2","name2", "pw2");
-        user3 = new User("id3","name3", "pw3");
+        user1 = new User("id1", "name1", "pw1", Level.BASIC, 0, 0);
+        user2 = new User("id2","name2", "pw2", Level.BASIC, 0, 0);
+        user3 = new User("id3","name3", "pw3", Level.BASIC, 0, 0);
         userDao.deleteAll();
     }
 
@@ -105,10 +105,32 @@ class UserDaoTest {
         assertEquals(all.size(), 0);
     }
 
+    @Test
+    public void update() throws Exception{
+        //given
+        userDao.add(user1);
+
+        //when
+        user1.setName("spring");
+        user1.setPassword("spassword");
+        user1.setLevel(Level.GOLD);
+        user1.setLogin(100);
+        user1.setRecommend(1991);
+        userDao.update(user1);
+
+        //then
+        User user = userDao.get(user1.getId());
+        checkSameUser(user, user1);
+    }
+
     public void checkSameUser(User user1, User user2) throws Exception{
         assertEquals(user1.getId(), user2.getId());
         assertEquals(user1.getName(), user2.getName());
         assertEquals(user1.getPassword(), user2.getPassword());
+        assertEquals(user1.getRecommend(), user2.getRecommend());
+        assertEquals(user1.getLogin(), user2.getLogin());
+        assertEquals(user1.getLevel(), user2.getLevel());
+
     }
 
 }
