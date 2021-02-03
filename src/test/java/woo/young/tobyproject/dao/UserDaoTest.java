@@ -27,9 +27,9 @@ class UserDaoTest {
     void before() throws Exception{
         ac = new AnnotationConfigApplicationContext(DaoFactory.class);
         userDao = ac.getBean(UserDaoJdbc.class);
-        user1 = new User("id1", "name1", "pw1", Level.BASIC, 0, 0);
-        user2 = new User("id2","name2", "pw2", Level.BASIC, 0, 0);
-        user3 = new User("id3","name3", "pw3", Level.BASIC, 0, 0);
+        user1 = new User("id1", "name1", "pw1", Level.BASIC, 0, 0, "a");
+        user2 = new User("id2","name2", "pw2", Level.BASIC, 0, 0, "a");
+        user3 = new User("id3","name3", "pw3", Level.BASIC, 0, 0, "a");
         userDao.deleteAll();
     }
 

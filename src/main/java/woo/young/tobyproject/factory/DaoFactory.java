@@ -13,9 +13,7 @@ import woo.young.tobyproject.dao.JdbcContext;
 import woo.young.tobyproject.dao.UserDaoJdbc;
 import woo.young.tobyproject.dao.UserMapper;
 import woo.young.tobyproject.domain.User;
-import woo.young.tobyproject.service.UpgradeLevelImpl;
-import woo.young.tobyproject.service.UpgradeLevelPolicy;
-import woo.young.tobyproject.service.UserService;
+import woo.young.tobyproject.service.*;
 
 import javax.sql.DataSource;
 
@@ -39,20 +37,25 @@ public class DaoFactory {
     public JdbcContext jdbcContext(){
         return new JdbcContext(dataSource());
     }
-    @Bean
-    UserService userService(){return new UserService(userDao(), upgradeLevelPolicy(), platformTransactionManager(), mailSender());}
+    @Bean(name = "userService")
+    UserService userService(){
+        return new UserServiceImpl(userDao(), upgradeLevelPolicy(), mailSender());
+    }
     @Bean
     UpgradeLevelPolicy upgradeLevelPolicy(){
         return new UpgradeLevelImpl();
     }
     @Bean
     MailSender mailSender(){
-        return new JavaMailSenderImpl();
+        return new MailSenderImpl();
     }
     @Bean
     PlatformTransactionManager platformTransactionManager(){
         return new DataSourceTransactionManager(dataSource());
     }
+    @Bean(name = "userServiceTx")
+    UserService userServiceTx(){
+        return new UserServiceTx(userService(), platformTransactionManager());}
 
     @Bean
     public DataSource dataSource(){
