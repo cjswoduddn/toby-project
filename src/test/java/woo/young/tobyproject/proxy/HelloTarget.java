@@ -15,4 +15,6 @@ public class HelloTarget implements Hello{
     public String sayThankYou(String name) {
         return "Thank You "+name;
     }
+
+    public String sayFucking(String name){return "Fucking "+name;}
 }

@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService{
     public void upgradeLevels(){
         List<User> users = userDao.getAll();
         for (User user : users) {
+            if(user.getId().equals("id7")) throw new RuntimeException();
             if (upgradeLevelPolicy.canUpgradeLevel(user)) {
                 upgradeLevel(user);
             }
